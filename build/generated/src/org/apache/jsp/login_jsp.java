@@ -57,39 +57,47 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        <link href=\"https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css\" rel=\"stylesheet\" integrity=\"sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN\" crossorigin=\"anonymous\">\n");
       out.write("    </head>\n");
       out.write("    <body>\n");
-      out.write("        <div class=\"container mt-5\">\n");
+      out.write("        <div class=\"container\">\n");
+      out.write("           \n");
       out.write("            <div class=\"row\">\n");
       out.write("                <div class=\"col-sm\">\n");
-      out.write("                    <form>\n");
-      out.write("                        <h3 class=\"text-center\">Iniciar Sesión</h3>\n");
-      out.write("                        <div class=\"form-group\">\n");
-      out.write("                            <label>Usuario</label>\n");
-      out.write("                            <input type=\"text\" class=\"form-control\" name=\"user\">\n");
+      out.write("                    <div class=\"card\" style=\"width: 22rem;\">\n");
+      out.write("                        <div class=\"card-body\">\n");
+      out.write("                            <form>\n");
+      out.write("                                <h3 class=\"text-center\">Iniciar Sesión</h3>\n");
+      out.write("                                <div class=\"form-group\">\n");
+      out.write("                                    <label>Usuario</label>\n");
+      out.write("                                    <input type=\"text\" class=\"form-control\" name=\"user\">\n");
+      out.write("                                </div>\n");
+      out.write("                                <div class=\"form-group\">\n");
+      out.write("                                    <label>Contraseña</label>\n");
+      out.write("                                    <input type=\"password\" class=\"form-control\" name=\"password\">\n");
+      out.write("                                </div>\n");
+      out.write("                                <button type=\"submit\" class=\"btn btn-success\" name=\"login\"><i class=\"fa fa-sign-in\" aria-hidden=\"true\"> INGRESAR</i></button>\n");
+      out.write("                                <button type=\"submit\" class=\"btn btn-primary\" name=\"regis\"><i class=\"fa fa-user-o\" aria-hidden=\"true\"> REGISTRARTE</i></button>\n");
+      out.write("                            </form>\n");
       out.write("                        </div>\n");
-      out.write("                        <div class=\"form-group\">\n");
-      out.write("                            <label>Contraseña</label>\n");
-      out.write("                            <input type=\"password\" class=\"form-control\" name=\"password\">\n");
-      out.write("                        </div>\n");
-      out.write("                        <button type=\"submit\" class=\"btn btn-primary\" name=\"login\">INGRESAR</button>\n");
-      out.write("                    </form>\n");
+      out.write("                    </div>\n");
+      out.write("\n");
+      out.write("\n");
       out.write("                </div>\n");
       out.write("            </div>\n");
       out.write("        </div>\n");
       out.write("    </body>\n");
       out.write("    ");
 
-        if(request.getParameter("login")!=null){
-            String user=request.getParameter("user");
-            String password=request.getParameter("password");
-            HttpSession sesion=request.getSession();
-            if(user.equals("admin")&&password.equals("admin")){
+        if (request.getParameter("login") != null) {
+            String user = request.getParameter("user");
+            String password = request.getParameter("password");
+            HttpSession sesion = request.getSession();
+            if (user.equals("admin") && password.equals("admin")) {
                 sesion.setAttribute("logueado", "1");
-                sesion.setAttribute("user",user);
+                sesion.setAttribute("user", user);
                 response.sendRedirect("indexdata.jsp");
-            }else{
-            out.print("Error en user o contraaseña");
+            } else {
+                out.print("Error en user o contraaseña");
             }
-            
+
         }
     
       out.write("\n");

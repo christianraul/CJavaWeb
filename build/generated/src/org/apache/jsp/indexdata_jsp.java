@@ -63,12 +63,28 @@ public final class indexdata_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("    <body>\n");
       out.write("        ");
 
+            HttpSession sesion = request.getSession();
+            if (sesion.getAttribute("logueado") == null || sesion.getAttribute("logueado").equals("0")) {
+                response.sendRedirect("login.jsp");
+            }
             Connection con = null;
             Statement st = null;
             ResultSet rs = null;
         
       out.write("\n");
-      out.write("        <div class=\"container my-5\">\n");
+      out.write("        \n");
+      out.write("            <div class=\"container-fluid\">\n");
+      out.write("                <nav class=\"navbar navbar-light bg-ligth\">\n");
+      out.write("                <a class=\"navbar-brand\">Empleados</a>\n");
+      out.write("                <form class=\"form-inline\" action=\"logout.jsp\">\n");
+      out.write("                    <a><i class=\"fa fa-user-circle\" aria-hidden=\"true\"> Admin</i>");
+ sesion.getAttribute("user"); 
+      out.write("</a>\n");
+      out.write("                    <button class=\"btn btn-outline-danger my-2 my-sm-0 ml-2\" type=\"submit\">Log out</button>\n");
+      out.write("                </form>\n");
+      out.write("            </nav>\n");
+      out.write("            </div>\n");
+      out.write("        <div class=\"container mt-3\">   \n");
       out.write("            <h2 class=\"text-center\">Conexión con la Base de Datos</h2>\n");
       out.write("            <div class=\"row\">\n");
       out.write("                <div class=\"col-sm\">\n");

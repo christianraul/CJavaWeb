@@ -17,15 +17,25 @@
     </head>
     <body>
         <%
-            HttpSession sesion=request.getSession();
-            if(sesion.getAttribute("logueado")==null || sesion.getAttribute("logueado").equals("0")){
+            HttpSession sesion = request.getSession();
+            if (sesion.getAttribute("logueado") == null || sesion.getAttribute("logueado").equals("0")) {
                 response.sendRedirect("login.jsp");
             }
             Connection con = null;
             Statement st = null;
             ResultSet rs = null;
         %>
-        <div class="container my-5">
+        
+            <div class="container-fluid">
+                <nav class="navbar navbar-light bg-ligth">
+                <a class="navbar-brand">Empleados</a>
+                <form class="form-inline" action="logout.jsp">
+                    <a href="datosusuario.jsp"><i class="fa fa-user-circle" aria-hidden="true"> Admin</i><% sesion.getAttribute("user"); %></a>
+                    <button class="btn btn-outline-danger my-2 my-sm-0 ml-2" type="submit">Log out</button>
+                </form>
+            </nav>
+            </div>
+        <div class="container mt-3">   
             <h2 class="text-center">Conexión con la Base de Datos</h2>
             <div class="row">
                 <div class="col-sm">

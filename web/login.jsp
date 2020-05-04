@@ -14,27 +14,28 @@
         <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     </head>
     <body>
-        <div class="container mt-5">
+        <div class="container">
+           
             <div class="row">
                 <div class="col-sm">
                     <div class="card" style="width: 22rem;">
                         <div class="card-body">
-                        <form>
-                            <h3 class="text-center">Iniciar Sesión</h3>
-                            <div class="form-group">
-                                <label>Usuario</label>
-                                <input type="text" class="form-control" name="user">
-                            </div>
-                            <div class="form-group">
-                                <label>Contraseña</label>
-                                <input type="password" class="form-control" name="password">
-                            </div>
-                            <button type="submit" class="btn btn-success" name="login"><i class="fa fa-sign-in" aria-hidden="true"> INGRESAR</i></button>
-                            <button type="submit" class="btn btn-primary" name="regis"><i class="fa fa-user-o" aria-hidden="true"> REGISTRARTE</i></button>
-                        </form>
+                            <form>
+                                <h3 class="text-center">Iniciar Sesión</h3>
+                                <div class="form-group">
+                                    <label>Usuario</label>
+                                    <input type="text" class="form-control" name="user">
+                                </div>
+                                <div class="form-group">
+                                    <label>Contraseña</label>
+                                    <input type="password" class="form-control" name="password">
+                                </div>
+                                <button type="submit" class="btn btn-success" name="login"><i class="fa fa-sign-in" aria-hidden="true"> INGRESAR</i></button>
+                                <button type="submit" class="btn btn-primary" name="regis"><i class="fa fa-user-o" aria-hidden="true"> REGISTRARTE</i></button>
+                            </form>
+                        </div>
                     </div>
-                    </div>
-                    
+
 
                 </div>
             </div>
