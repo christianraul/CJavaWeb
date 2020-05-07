@@ -1,5 +1,8 @@
 
-
+<%@page import="java.math.BigInteger"%>
+<%@page import="java.security.MessageDigest"%>
+<%@page import="java.sql.*"%>
+<%@page import="com.mysql.jdbc.Driver"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,12 +18,12 @@
     </head>
     <body>
         <div class="container">
-           
+
             <div class="row">
                 <div class="col-sm">
                     <div class="card" style="width: 22rem;">
                         <div class="card-body">
-                            <form>
+                            <form method="post" action="login.jsp">
                                 <h3 class="text-center">Iniciar Sesión</h3>
                                 <div class="form-group">
                                     <label>Usuario</label>
@@ -33,6 +36,34 @@
                                 <button type="submit" class="btn btn-success" name="login"><i class="fa fa-sign-in" aria-hidden="true"> INGRESAR</i></button>
                                 <button type="submit" class="btn btn-primary" name="regis"><i class="fa fa-user-o" aria-hidden="true"> REGISTRARTE</i></button>
                             </form>
+                            <%
+                                /*conexion a la base de datos*/
+                                Connection con = null;
+                                Statement st = null;
+                                ResultSet rs = null;
+
+                                /*para validar el ingreso*/
+                                if (request.getParameter("login") != null) {
+                                    String user = request.getParameter("user");
+                                    String password = request.getParameter("password");
+                                    HttpSession sesion = request.getSession();
+                                    try {
+                                        Class.forName("com.mysql.jdbc.Driver");
+                                        con = DriverManager.getConnection("jdbc:mysql://localhost/jspdata?user=root&password=");
+                                        st = con.createStatement();
+                                        rs = st.executeQuery("SELECT * FROM user WHERE USER='" + user + "'and password='" + getMD5(password) + "'");
+                                        while (rs.next()) {
+                                            sesion.setAttribute("logueado", "1");
+                                            sesion.setAttribute("user", rs.getString("user"));
+                                            sesion.setAttribute("id", rs.getString("id"));
+                                            response.sendRedirect("indexdata.jsp");
+                                        }
+                                        out.print(" <div class=\"alert alert-danger\" role=\"alert\"> usuario no valido </div>");
+                                        
+                                    } catch (Exception e) {
+                                    }
+                                }
+                            %>
                         </div>
                     </div>
 
@@ -42,6 +73,7 @@
         </div>
     </body>
     <%
+        /*
         if (request.getParameter("login") != null) {
             String user = request.getParameter("user");
             String password = request.getParameter("password");
@@ -55,5 +87,23 @@
             }
 
         }
+         */
     %>
 </html>
+<!-Vamos agregar contraseña encriptada con MD5-->
+<%!
+    public String getMD5(String input){
+        try{
+        MessageDigest md=MessageDigest.getInstance("MD5");
+        byte[] encBytes=md.digest(input.getBytes());
+        BigInteger numero=new BigInteger(1, encBytes);
+        String encString=numero.toString(16);
+        while(encString.length()<32){
+            encString="0"+encString;
+        }
+        return encString;
+        } catch (Exception e){
+        throw new RuntimeException(e);
+}
+}
+%>

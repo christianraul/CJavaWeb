@@ -77,8 +77,8 @@ public final class indexdata_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                <nav class=\"navbar navbar-light bg-ligth\">\n");
       out.write("                <a class=\"navbar-brand\">Empleados</a>\n");
       out.write("                <form class=\"form-inline\" action=\"logout.jsp\">\n");
-      out.write("                    <a><i class=\"fa fa-user-circle\" aria-hidden=\"true\"> Admin</i>");
- sesion.getAttribute("user"); 
+      out.write("                    <a href=\"datosusuario.jsp\"><i class=\"fa fa-user-circle\" aria-hidden=\"true\"></i> ");
+      out.print( sesion.getAttribute("user") );
       out.write("</a>\n");
       out.write("                    <button class=\"btn btn-outline-danger my-2 my-sm-0 ml-2\" type=\"submit\">Log out</button>\n");
       out.write("                </form>\n");

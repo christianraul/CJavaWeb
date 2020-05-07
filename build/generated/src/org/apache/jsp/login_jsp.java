@@ -3,9 +3,29 @@ package org.apache.jsp;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.sql.*;
+import com.mysql.jdbc.Driver;
 
 public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
+
+
+    public String getMD5(String input){
+        try{
+        MessageDigest md=MessageDigest.getInstance("MD5");
+        byte[] encBytes=md.digest(input.getBytes());
+        BigInteger numero=new BigInteger(1, encBytes);
+        String encString=numero.toString(16);
+        while(encString.length()<32){
+            encString="0"+encString;
+        }
+        return encString;
+        } catch (Exception e){
+        throw new RuntimeException(e);
+}
+}
 
   private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
 
@@ -44,6 +64,9 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\n");
       out.write("\n");
       out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
       out.write("<!DOCTYPE html>\n");
       out.write("<html>\n");
       out.write("    <head>\n");
@@ -58,12 +81,12 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("    </head>\n");
       out.write("    <body>\n");
       out.write("        <div class=\"container\">\n");
-      out.write("           \n");
+      out.write("\n");
       out.write("            <div class=\"row\">\n");
       out.write("                <div class=\"col-sm\">\n");
       out.write("                    <div class=\"card\" style=\"width: 22rem;\">\n");
       out.write("                        <div class=\"card-body\">\n");
-      out.write("                            <form>\n");
+      out.write("                            <form method=\"post\" action=\"login.jsp\">\n");
       out.write("                                <h3 class=\"text-center\">Iniciar Sesión</h3>\n");
       out.write("                                <div class=\"form-group\">\n");
       out.write("                                    <label>Usuario</label>\n");
@@ -76,6 +99,36 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                                <button type=\"submit\" class=\"btn btn-success\" name=\"login\"><i class=\"fa fa-sign-in\" aria-hidden=\"true\"> INGRESAR</i></button>\n");
       out.write("                                <button type=\"submit\" class=\"btn btn-primary\" name=\"regis\"><i class=\"fa fa-user-o\" aria-hidden=\"true\"> REGISTRARTE</i></button>\n");
       out.write("                            </form>\n");
+      out.write("                            ");
+
+                                /*conexion a la base de datos*/
+                                Connection con = null;
+                                Statement st = null;
+                                ResultSet rs = null;
+
+                                /*para validar el ingreso*/
+                                if (request.getParameter("login") != null) {
+                                    String user = request.getParameter("user");
+                                    String password = request.getParameter("password");
+                                    HttpSession sesion = request.getSession();
+                                    try {
+                                        Class.forName("com.mysql.jdbc.Driver");
+                                        con = DriverManager.getConnection("jdbc:mysql://localhost/jspdata?user=root&password=");
+                                        st = con.createStatement();
+                                        rs = st.executeQuery("SELECT * FROM user WHERE USER='" + user + "'and password='" + getMD5(password) + "'");
+                                        while (rs.next()) {
+                                            sesion.setAttribute("logueado", "1");
+                                            sesion.setAttribute("user", rs.getString("user"));
+                                            sesion.setAttribute("id", rs.getString("id"));
+                                            response.sendRedirect("indexdata.jsp");
+                                        }
+                                        out.print(" <div class=\"alert alert-danger\" role=\"alert\"> usuario no valido </div>");
+                                        
+                                    } catch (Exception e) {
+                                    }
+                                }
+                            
+      out.write("\n");
       out.write("                        </div>\n");
       out.write("                    </div>\n");
       out.write("\n");
@@ -86,6 +139,7 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("    </body>\n");
       out.write("    ");
 
+        /*
         if (request.getParameter("login") != null) {
             String user = request.getParameter("user");
             String password = request.getParameter("password");
@@ -99,9 +153,11 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
             }
 
         }
+         */
     
       out.write("\n");
       out.write("</html>\n");
+      out.write("<!-Vamos agregar contraseña encriptada con MD5-->\n");
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;

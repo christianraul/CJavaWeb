@@ -1,5 +1,8 @@
 
-
+<%@page import="java.math.BigInteger"%>
+<%@page import="java.security.MessageDigest"%>
+<%@page import="java.sql.*"%>
+<%@page import="com.mysql.jdbc.Driver"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,28 +18,80 @@
 
     </head>
     <body>
+        <%
+            HttpSession sesion = request.getSession();
+            if (sesion.getAttribute("logueado") == null || sesion.getAttribute("logueado").equals("0")) {
+                response.sendRedirect("login.jsp");
+            }
+            
+            
+            Connection con = null;
+            Statement st = null;
+
+        %>
         <div class="container">
             <div class="row">
                 <div class="card">
                     <div class="card-body">
-                        <form>
+                        <form method="post" action="datosusuario.jsp">
                             <div class="form-group">
                                 <label >Usuario</label>
-                                <input type="text" id="user" class="form-control">
+                                <input type="text" name="user" class="form-control" value="<%= sesion.getAttribute("user")%>">
                             </div>
                             <div class="form-group">
                                 <label >Password</label>
-                                <input type="password" id="password1" class="form-control">
+                                <input type="password" name="password1" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label >Repetir su password</label>
-                                <input type="password" id="password2" class="form-control">
+                                <input type="password" name="password2" class="form-control">
                             </div>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="submit" name="guardar" class="btn btn-primary">Guardar</button>
+                            <a href="indexdata.jsp" class="btn btn-danger">Cancelar</a>
                         </form> 
                     </div>
                 </div>
             </div>
         </div>
     </body>
+    <%
+        if(request.getParameter("guardar")!=null){
+            String user =request.getParameter("user");
+            String password1 = request.getParameter("password1");
+            String password2 = request.getParameter("password2");
+            
+            if(password1.equals(password2)){
+                try {
+                        Class.forName("com.mysql.jdbc.Driver");
+                        con=DriverManager.getConnection("jdbc:mysql://localhost/jspdata?user=root&password=");
+                        st=con.createStatement();
+                        st.executeUpdate("UPDATE user SET user='" + user + "',password='" + getMD5(password1) +"' WHERE id='"+sesion.getAttribute("id")+"'");
+                        sesion.setAttribute("user", user);
+                        response.sendRedirect("indexdata.jsp");
+                    } catch (Exception e) {
+                        out.print("Error en la conexion"+e);
+                    }
+            } else{
+                out.print("Password no conciden");
+            }
+        }
+    %>
 </html>
+<!--http://www.md5.cz/-->
+<!-Vamos agregar contraseña encriptada con MD5-->
+<%!
+    public String getMD5(String input){
+        try{
+        MessageDigest md=MessageDigest.getInstance("MD5");
+        byte[] encBytes=md.digest(input.getBytes());
+        BigInteger numero=new BigInteger(1, encBytes);
+        String encString=numero.toString(16);
+        while(encString.length()<32){
+            encString="0"+encString;
+        }
+        return encString;
+        } catch (Exception e){
+        throw new RuntimeException(e);
+}
+}
+%>

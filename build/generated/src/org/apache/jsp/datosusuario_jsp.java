@@ -3,6 +3,8 @@ package org.apache.jsp;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
+import java.sql.*;
+import com.mysql.jdbc.Driver;
 
 public final class datosusuario_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
@@ -44,6 +46,7 @@ public final class datosusuario_jsp extends org.apache.jasper.runtime.HttpJspBas
       out.write("\n");
       out.write("\n");
       out.write("\n");
+      out.write("\n");
       out.write("<!DOCTYPE html>\n");
       out.write("<html>\n");
       out.write("    <head>\n");
@@ -58,14 +61,27 @@ public final class datosusuario_jsp extends org.apache.jasper.runtime.HttpJspBas
       out.write("\n");
       out.write("    </head>\n");
       out.write("    <body>\n");
+      out.write("        ");
+
+            HttpSession sesion = request.getSession();
+            if (sesion.getAttribute("logueado") == null || sesion.getAttribute("leogueado").equals("0")) {
+                response.sendRedirect("login.jsp");
+            }
+            Connection con = null;
+            Statement st = null;
+
+        
+      out.write("\n");
       out.write("        <div class=\"container\">\n");
       out.write("            <div class=\"row\">\n");
       out.write("                <div class=\"card\">\n");
       out.write("                    <div class=\"card-body\">\n");
-      out.write("                        <form>\n");
+      out.write("                        <form method=\"post\" action=\"datosusuario.jsp\">\n");
       out.write("                            <div class=\"form-group\">\n");
       out.write("                                <label >Usuario</label>\n");
-      out.write("                                <input type=\"text\" id=\"user\" class=\"form-control\">\n");
+      out.write("                                <input type=\"text\" id=\"user\" class=\"form-control\" value=\"");
+      out.print( sesion.getAttribute("user"));
+      out.write("\">\n");
       out.write("                            </div>\n");
       out.write("                            <div class=\"form-group\">\n");
       out.write("                                <label >Password</label>\n");
@@ -75,13 +91,38 @@ public final class datosusuario_jsp extends org.apache.jasper.runtime.HttpJspBas
       out.write("                                <label >Repetir su password</label>\n");
       out.write("                                <input type=\"password\" id=\"password2\" class=\"form-control\">\n");
       out.write("                            </div>\n");
-      out.write("                            <button type=\"submit\" class=\"btn btn-primary\">Guardar</button>\n");
+      out.write("                            <button type=\"submit\" name=\"guardar\" class=\"btn btn-primary\">Guardar</button>\n");
+      out.write("                            <a href=\"indexdata.jsp\" class=\"btn btn-danger\">Cancelar</a>\n");
       out.write("                        </form> \n");
       out.write("                    </div>\n");
       out.write("                </div>\n");
       out.write("            </div>\n");
       out.write("        </div>\n");
       out.write("    </body>\n");
+      out.write("    ");
+
+        if(request.getParameter("guardar")!=null){
+            String user =request.getParameter("user");
+            String password1 = request.getParameter("password1");
+            String password2 = request.getParameter("password2");
+            
+            if(password1.equals(password2)){
+                try {
+                        Class.forName("com.mysql.jdbc.Driver");
+                        con=DriverManager.getConnection("jdbc:mysql://localhost/jspdata?user=root&password=");
+                        st=con.createStatement();
+                        st.executeUpdate("UPDATE user SET user='" + user + "',password='" + password1 +"' WHERE id='"+sesion.getAttribute("id")+"'");
+                        sesion.setAttribute("user", user);
+                        response.sendRedirect("indexdata.jsp");
+                    } catch (Exception e) {
+                        out.print("Error en la conexion"+e);
+                    }
+            } else{
+                out.print("Password no conciden");
+            }
+        }
+    
+      out.write("\n");
       out.write("</html>\n");
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
