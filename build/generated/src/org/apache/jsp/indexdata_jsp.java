@@ -3,8 +3,6 @@ package org.apache.jsp;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
-import java.sql.*;
-import com.mysql.jdbc.Driver;
 
 public final class indexdata_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
@@ -47,7 +45,6 @@ public final class indexdata_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\n");
       out.write("\n");
       out.write("\n");
-      out.write("\n");
       out.write("<!DOCTYPE html>\n");
       out.write("<html>\n");
       out.write("    <head>\n");
@@ -67,103 +64,64 @@ public final class indexdata_jsp extends org.apache.jasper.runtime.HttpJspBase
             if (sesion.getAttribute("logueado") == null || sesion.getAttribute("logueado").equals("0")) {
                 response.sendRedirect("login.jsp");
             }
-            Connection con = null;
-            Statement st = null;
-            ResultSet rs = null;
+
         
       out.write("\n");
-      out.write("        \n");
-      out.write("            <div class=\"container-fluid\">\n");
-      out.write("                <nav class=\"navbar navbar-light bg-ligth\">\n");
+      out.write("\n");
+      out.write("        <div class=\"container-fluid\">\n");
+      out.write("            <nav class=\"navbar navbar-light bg-ligth\">\n");
       out.write("                <a class=\"navbar-brand\">Empleados</a>\n");
       out.write("                <form class=\"form-inline\" action=\"logout.jsp\">\n");
       out.write("                    <a href=\"datosusuario.jsp\"><i class=\"fa fa-user-circle\" aria-hidden=\"true\"></i> ");
-      out.print( sesion.getAttribute("user") );
+      out.print( sesion.getAttribute("user"));
       out.write("</a>\n");
       out.write("                    <button class=\"btn btn-outline-danger my-2 my-sm-0 ml-2\" type=\"submit\">Log out</button>\n");
       out.write("                </form>\n");
       out.write("            </nav>\n");
-      out.write("            </div>\n");
+      out.write("        </div>\n");
       out.write("        <div class=\"container mt-3\">   \n");
       out.write("            <h2 class=\"text-center\">Conexión con la Base de Datos</h2>\n");
       out.write("            <div class=\"row\">\n");
       out.write("                <div class=\"col-sm\">\n");
-      out.write("                    <table class=\"table table-hover\">\n");
-      out.write("                        <thead>\n");
-      out.write("                            <tr>\n");
-      out.write("                                <th scope=\"col\" colspan=\"4\" class=\"text-center\"><h4>Empleados</h4></th>\n");
-      out.write("                                <th scope=\"col\">\n");
-      out.write("                                    <a href=\"agregar.jsp\" <button type=\"button\" class=\"btn btn-primary\"><i class=\"fa fa-user-plus\" aria-hidden=\"true\"></i></button></a>\n");
+      out.write("                    <form action=\"indexdata.jsp\" method=\"get\">\n");
+      out.write("                        <table class=\"table table-hover\">\n");
+      out.write("                            <thead>\n");
+      out.write("                                <tr>\n");
+      out.write("                                    <th scope=\"col\" colspan=\"4\" class=\"text-center\"><h4>Empleados</h4></th>\n");
       out.write("\n");
-      out.write("                                </th>\n");
+      out.write("                                    <th scope=\"col\">\n");
+      out.write("                                        <a href=\"agregar.jsp\" <button type=\"button\" class=\"btn btn-primary\"><i class=\"fa fa-user-plus\" aria-hidden=\"true\"></i></button></a>\n");
       out.write("\n");
-      out.write("                            </tr>\n");
-      out.write("                            <tr>\n");
-      out.write("                                <th scope=\"col\">id</th>\n");
-      out.write("                                <th scope=\"col\">Nombre</th>\n");
-      out.write("                                <th scope=\"col\">Direccion</th>\n");
-      out.write("                                <th scope=\"col\">Telefono</th>\n");
-      out.write("                                <th scope=\"col\">Acciones</th>\n");
-      out.write("                            </tr>\n");
-      out.write("                        </thead>\n");
-      out.write("                        <tbody>\n");
-      out.write("                            ");
-
-                                try {
-
-                                    Class.forName("com.mysql.jdbc.Driver");
-                                    con = DriverManager.getConnection("jdbc:mysql://localhost/jspdata?user=root&password=");
-                                    st = con.createStatement();
-                                    rs = st.executeQuery("SELECT * FROM empledos");
-                                    while (rs.next()) {
-                            
+      out.write("                                    </th>\n");
       out.write("\n");
-      out.write("                            <tr>\n");
-      out.write("                                <th scope=\"row\">");
-      out.print( rs.getString(1));
-      out.write("</th>\n");
-      out.write("                                <td>");
-      out.print( rs.getString(2));
-      out.write("</td>\n");
-      out.write("                                <td>");
-      out.print( rs.getString(3));
-      out.write("</td>\n");
-      out.write("                                <td>");
-      out.print( rs.getString(4));
-      out.write("</td>\n");
-      out.write("                                <td>\n");
-      out.write("                                    ");
-      out.write("\n");
-      out.write("                                    <a href=\"editar.jsp?id=");
-      out.print( rs.getString(1));
-      out.write("&nombre=");
-      out.print( rs.getString(2));
-      out.write("&direccion=");
-      out.print( rs.getString(3));
-      out.write("&telefono=");
-      out.print( rs.getString(4));
-      out.write("\"><button type=\"button\" class=\"btn btn-warning mr-2\"><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></button></a>\n");
-      out.write("\n");
-      out.write("                                    ");
-      out.write("\n");
-      out.write("                                    <a href=\"borrar.jsp?id=");
-      out.print( rs.getString(1));
-      out.write("\"><button type=\"button\" class=\"btn btn-danger\"><i class=\"fa fa-trash-o\" aria-hidden=\"true\"></i></button></a>\n");
-      out.write("\n");
-      out.write("                                </td>\n");
-      out.write("                            </tr>      \n");
-      out.write("                            ");
-
-                                    }
-                                } catch (Exception e) {
-                                    out.print("ERROR EN LA CONEXION");
-                                }
-                            
+      out.write("                                </tr>\n");
+      out.write("                                <tr>\n");
+      out.write("                                    <th scope=\"col\" class=\"text-center\"></th>\n");
+      out.write("                                    <th scope=\"col\" class=\"text-center\">\n");
+      out.write("                                        <input type=\"text\" name=\"nombre\" class=\"form-control\" placeholder=\"buscar por nombre\" />\n");
+      out.write("                                    </th>\n");
+      out.write("                                    <td scope=\"col\" class=\"text-center\">\n");
+      out.write("                                        <input type=\"submit\" value=\"Buscar\" name=\"buscar\" class=\"form-control btn btn-primary\" />\n");
+      out.write("                                    </td>\n");
+      out.write("                                    <th>\n");
+      out.write("                                </tr>\n");
+      out.write("                                <tr>\n");
+      out.write("                                    <th scope=\"col\">id</th>\n");
+      out.write("                                    <th scope=\"col\">Nombre</th>\n");
+      out.write("                                    <th scope=\"col\">Direccion</th>\n");
+      out.write("                                    <th scope=\"col\">Telefono</th>\n");
+      out.write("                                    <th scope=\"col\">Acciones</th>\n");
+      out.write("                                </tr>\n");
+      out.write("                            </thead>\n");
+      out.write("                            <tbody>\n");
+      out.write("                                <!--Llamar al servels empleados-->\n");
+      out.write("                                ");
+      org.apache.jasper.runtime.JspRuntimeLibrary.include(request, response, "empleados", out, false);
       out.write("\n");
       out.write("\n");
-      out.write("\n");
-      out.write("                        </tbody>\n");
-      out.write("                    </table>\n");
+      out.write("                            </tbody>\n");
+      out.write("                        </table>\n");
+      out.write("                    </form>\n");
       out.write("                </div>\n");
       out.write("\n");
       out.write("            </div>\n");

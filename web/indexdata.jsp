@@ -1,7 +1,6 @@
 
 
-<%@page import="java.sql.*"%>
-<%@page import="com.mysql.jdbc.Driver"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,76 +20,59 @@
             if (sesion.getAttribute("logueado") == null || sesion.getAttribute("logueado").equals("0")) {
                 response.sendRedirect("login.jsp");
             }
-            Connection con = null;
-            Statement st = null;
-            ResultSet rs = null;
+
         %>
-        
-            <div class="container-fluid">
-                <nav class="navbar navbar-light bg-ligth">
+
+        <div class="container-fluid">
+            <nav class="navbar navbar-light bg-ligth">
                 <a class="navbar-brand">Empleados</a>
                 <form class="form-inline" action="logout.jsp">
-                    <a href="datosusuario.jsp"><i class="fa fa-user-circle" aria-hidden="true"></i> <%= sesion.getAttribute("user") %></a>
+                    <a href="datosusuario.jsp"><i class="fa fa-user-circle" aria-hidden="true"></i> <%= sesion.getAttribute("user")%></a>
                     <button class="btn btn-outline-danger my-2 my-sm-0 ml-2" type="submit">Log out</button>
                 </form>
             </nav>
-            </div>
+        </div>
         <div class="container mt-3">   
             <h2 class="text-center">Conexión con la Base de Datos</h2>
             <div class="row">
                 <div class="col-sm">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col" colspan="4" class="text-center"><h4>Empleados</h4></th>
-                                <th scope="col">
-                                    <a href="agregar.jsp" <button type="button" class="btn btn-primary"><i class="fa fa-user-plus" aria-hidden="true"></i></button></a>
+                    <form action="indexdata.jsp" method="get">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col" colspan="4" class="text-center"><h4>Empleados</h4></th>
 
-                                </th>
+                                    <th scope="col">
+                                        <a href="agregar.jsp" <button type="button" class="btn btn-primary"><i class="fa fa-user-plus" aria-hidden="true"></i></button></a>
 
-                            </tr>
-                            <tr>
-                                <th scope="col">id</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Direccion</th>
-                                <th scope="col">Telefono</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                try {
+                                    </th>
 
-                                    Class.forName("com.mysql.jdbc.Driver");
-                                    con = DriverManager.getConnection("jdbc:mysql://localhost/jspdata?user=root&password=");
-                                    st = con.createStatement();
-                                    rs = st.executeQuery("SELECT * FROM empledos");
-                                    while (rs.next()) {
-                            %>
-                            <tr>
-                                <th scope="row"><%= rs.getString(1)%></th>
-                                <td><%= rs.getString(2)%></td>
-                                <td><%= rs.getString(3)%></td>
-                                <td><%= rs.getString(4)%></td>
-                                <td>
-                                    <%-- icono de editar--%>
-                                    <a href="editar.jsp?id=<%= rs.getString(1)%>&nombre=<%= rs.getString(2)%>&direccion=<%= rs.getString(3)%>&telefono=<%= rs.getString(4)%>"><button type="button" class="btn btn-warning mr-2"><i class="fa fa-pencil" aria-hidden="true"></i></button></a>
+                                </tr>
+                                <tr>
+                                    <th scope="col" class="text-center"></th>
+                                    <th scope="col" class="text-center">
+                                        <input type="text" name="nombre" class="form-control" placeholder="buscar por nombre" />
+                                    </th>
+                                    <td scope="col" class="text-center">
+                                        <input type="submit" value="Buscar" name="buscar" class="form-control btn btn-primary" />
+                                    </td>
+                                    <th>
+                                </tr>
+                                <tr>
+                                    <th scope="col">id</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Direccion</th>
+                                    <th scope="col">Telefono</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--Llamar al servels empleados-->
+                                <jsp:include page="empleados"/>
 
-                                    <%-- icono de eliminar--%>
-                                    <a href="borrar.jsp?id=<%= rs.getString(1)%>"><button type="button" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button></a>
-
-                                </td>
-                            </tr>      
-                            <%
-                                    }
-                                } catch (Exception e) {
-                                    out.print("ERROR EN LA CONEXION");
-                                }
-                            %>
-
-
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
 
             </div>

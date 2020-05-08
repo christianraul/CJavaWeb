@@ -3,29 +3,12 @@ package org.apache.jsp;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
-import java.math.BigInteger;
-import java.security.MessageDigest;
+import util.Encriptar;
 import java.sql.*;
 import com.mysql.jdbc.Driver;
 
 public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
-
-
-    public String getMD5(String input){
-        try{
-        MessageDigest md=MessageDigest.getInstance("MD5");
-        byte[] encBytes=md.digest(input.getBytes());
-        BigInteger numero=new BigInteger(1, encBytes);
-        String encString=numero.toString(16);
-        while(encString.length()<32){
-            encString="0"+encString;
-        }
-        return encString;
-        } catch (Exception e){
-        throw new RuntimeException(e);
-}
-}
 
   private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
 
@@ -61,8 +44,6 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
-      out.write("\n");
-      out.write("\n");
       out.write("\n");
       out.write("\n");
       out.write("\n");
@@ -105,6 +86,7 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
                                 Connection con = null;
                                 Statement st = null;
                                 ResultSet rs = null;
+                                Encriptar enc=new Encriptar();
 
                                 /*para validar el ingreso*/
                                 if (request.getParameter("login") != null) {
@@ -115,7 +97,7 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
                                         Class.forName("com.mysql.jdbc.Driver");
                                         con = DriverManager.getConnection("jdbc:mysql://localhost/jspdata?user=root&password=");
                                         st = con.createStatement();
-                                        rs = st.executeQuery("SELECT * FROM user WHERE USER='" + user + "'and password='" + getMD5(password) + "'");
+                                        rs = st.executeQuery("SELECT * FROM user WHERE USER='" + user + "'and password='" + enc.getMD5(password) + "'");
                                         while (rs.next()) {
                                             sesion.setAttribute("logueado", "1");
                                             sesion.setAttribute("user", rs.getString("user"));
@@ -157,7 +139,6 @@ public final class login_jsp extends org.apache.jasper.runtime.HttpJspBase
     
       out.write("\n");
       out.write("</html>\n");
-      out.write("<!-Vamos agregar contraseña encriptada con MD5-->\n");
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;
